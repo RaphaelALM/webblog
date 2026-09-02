@@ -6,11 +6,10 @@ import org.raphael.blog.exception.ArticleNotFoundException;
 import org.raphael.blog.mapper.ArticleMapper;
 import org.raphael.blog.model.Article;
 import org.raphael.blog.repository.ArticleRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ArticleService {
@@ -58,13 +57,24 @@ public class ArticleService {
                 .toList();
     }
 
-
-
     // edit article
-//    public ArticleResponse editArticle(Long id, ArticleRequest request){
-//           return
-//    }
+    public ArticleResponse editArticle(Long id, ArticleRequest request){
 
-    //
+        Article article = findEntityById(id);
+
+        article.setTitle(request.title());
+        article.setPublishTime(request.publishDateTime());
+        article.setContent(request.content());
+
+        Article updatedArticle = articleRepository.save(article);
+
+        return mapper.toResponse(updatedArticle);
+    }
+
+
+    // private function for returning entity instead of DTO
+    private Article findEntityById(Long id){
+        return articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));
+    }
 
 }
