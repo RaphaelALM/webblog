@@ -44,9 +44,10 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleResponseList);
     }
 
-
-
-
-
+    @PutMapping("edit/{id}")
+    public ResponseEntity<ArticleResponse> editArticle(@Valid @RequestBody ArticleRequest request, @PathVariable Long id){
+            ArticleResponse updatedArticle = articleService.editArticle(id, request);
+        return ResponseEntity.ok(updatedArticle);
+    }
 
 }
